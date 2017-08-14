@@ -3,7 +3,6 @@ package com.jephysoftmediaplayer.player;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 import com.jephysoftmediaplayer.decode.DecodeConsumer;
 import com.jephysoftmediaplayer.decode.OnDecodeYUVCompeleted;
@@ -39,8 +38,6 @@ public class DecodeController implements OnFrameCallback{
         this.compressedFramePacketBuffer = new CompressedFramePacketBuffer(100,20);
         new Thread(frameProducer).start();//开启帧数据缓存线程
         new Thread(new DecodeConsumer(displayer,this.compressedFramePacketBuffer)).start();//开启一个解码器进行解码
-        new Thread(new DecodeConsumer(displayer,this.compressedFramePacketBuffer)).start();//再开启一个解码器进行解码
-        new Thread(new DecodeConsumer(displayer,this.compressedFramePacketBuffer)).start();//再开启一个解码器进行解码
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)

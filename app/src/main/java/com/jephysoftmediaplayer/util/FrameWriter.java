@@ -17,24 +17,15 @@ public class FrameWriter {
 
     private final static String TAG = "FrameWriter";
 
-    private final File defaultDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/temp_frame_0724_1549");
+    public final File defaultDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/UVCResource");
 
-    private File dir;
     private int fileNum = 0;//文件命名计数
-
-    /**
-     * @param dir 帧数据存放路径
-     */
-
-    public FrameWriter(File dir) {
-        this.dir = dir;
-    }
 
     /**
      * 默认初始化帧数据存放路径
      */
-    public FrameWriter() {
-        this.dir = defaultDir;
+    public FrameWriter()
+    {
     }
 
     /**
@@ -44,42 +35,7 @@ public class FrameWriter {
      * @return
      */
     public boolean writeFrameToStorage(ByteBuffer byteBuffer, File destDir){
-
-        byte[] bytes = new byte[byteBuffer.remaining()];
-        byteBuffer.get(bytes);
-
-        Log.d(TAG, "writeFile....数组长度。。。" + bytes.length);
-        if (null == destDir){
-            destDir = defaultDir;
-        }
-
-        if (!destDir.exists()) {
-            destDir.mkdir();
-        }
-
-        File file = new File(destDir, "/" + fileNum + "_frame.txt");
-        FileOutputStream outputStream = null;
-        BufferedOutputStream bufferedOutputStream=null;
-        try {
-            outputStream = new FileOutputStream(file);
-            bufferedOutputStream = new BufferedOutputStream(outputStream);
-//            byte[] bytes = new byte[frame.remaining()];
-//            frame.get(bytes);
-//            outputStream.write(bytes);
-            bufferedOutputStream.write(bytes);
-            bufferedOutputStream.flush();
-            fileNum++;
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
+        return writeFrameToStorage(byteBuffer.array(),destDir);
     }
 
     /**
@@ -96,7 +52,7 @@ public class FrameWriter {
         }
 
         if (!destDir.exists()) {
-            destDir.mkdir();
+            destDir.mkdirs();
         }
 
         File file = new File(destDir, "/" + fileNum + "_frame.txt");

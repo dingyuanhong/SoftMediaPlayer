@@ -2,6 +2,9 @@ package com.jephysoftmediaplayer.decode;
 
 import android.util.Log;
 
+import com.jephysoftmediaplayer.util.FrameWriter;
+
+import java.io.File;
 import java.nio.ByteBuffer;
 
 /**
@@ -12,7 +15,8 @@ public class UVCSoftDecoder extends JNIObject{
     private OnDecodeYUVCompeleted onDecodeYUVCompeleted;
     private byte[]  sps = {0x67,0x64,0x00,0x33,0xac-0x100,0x1b,0x1a,0x80-0x100,0x2f,0x80-0x100,0xbf-0x100,0xa1-0x100,0x00,0x00,0x03,0x00,0x01,0x00,0x00,0x03,0x00,0x3c,0x8f-0x100,0x14,0x2a,0xa0-0x100};
     private byte[] pps = {0x68,0xee-0x100,0x0b,0xcb-0x100};
-
+    FrameWriter writer;
+    File noDecoderFile;
     public UVCSoftDecoder(OnDecodeYUVCompeleted onDecodeYUVCompeleted) {
         this.onDecodeYUVCompeleted = onDecodeYUVCompeleted;
         construct();
@@ -22,6 +26,8 @@ public class UVCSoftDecoder extends JNIObject{
         setPPS(pps,pps.length);
         int ret = init("h264_mediacodec",5);
         Log.d(TAG, "UVCSoftDecoder......................初始化:" + (ret != 0 ? "失败" : "成功"));
+        writer = new FrameWriter();
+        noDecoderFile = new File(writer.defaultDir + "/temp_yuv420_3040_1520/");
     }
 
     int nativeframeCount = 0;
@@ -57,6 +63,7 @@ public class UVCSoftDecoder extends JNIObject{
         ByteBuffer v = ByteBuffer.wrap(data,width*height + width*height/4,width*height/4);
 
         OnComplite(width,height,timestamp,y.array(),u.array(),v.array());
+        writer.writeFrameToStorage(data,noDecoderFile);
     }
 
     private void  OnComplite(int width, int height,long timestamp,byte[] yData,byte[] uData,byte[] vData)
