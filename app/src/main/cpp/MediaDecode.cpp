@@ -252,7 +252,7 @@ int MediaDecode::init(const char * name,int thread_count)
     info.Height = 0;
     info.Format = AV_PIX_FMT_NONE;
     struct EvoVideoInfo des = info;
-    des.Format = AV_PIX_FMT_YUV420P;
+    des.Format = AV_PIX_FMT_NV12;
     convert.Initialize(info,des);
     Attach(&convert);
     return 0;

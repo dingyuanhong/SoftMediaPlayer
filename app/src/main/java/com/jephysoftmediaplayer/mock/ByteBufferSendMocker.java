@@ -50,7 +50,7 @@ public class ByteBufferSendMocker implements Data,Runnable{
 
     public void open(File fileDir){
         if (fileDir == null) {
-            fileDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/UVCResource/temp_frame_0724_1549");
+            fileDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/UVCResource/temp_frame");
         }
         Message message = mHandler.obtainMessage(START);
         message.obj = fileDir;
